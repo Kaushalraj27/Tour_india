@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import StatusSection from '@/components/StatusSection';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Map, Hotel, User, ArrowRight } from 'lucide-react';
@@ -6,6 +7,9 @@ import { Map, Hotel, User, ArrowRight } from 'lucide-react';
 export default function Home() {
     return (
         <Layout>
+            {/* Status Section */}
+            <StatusSection />
+            
             {/* Hero Section */}
             <div className="relative h-[600px] w-full">
                 <Image
