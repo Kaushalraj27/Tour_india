@@ -1,13 +1,15 @@
 import Link from 'next/link';
-import { Home, Map, Hotel, Calendar, Settings, User } from 'lucide-react';
+import { Home, Map, Hotel, Calendar, Settings, User, Users, Compass } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { cn } from '@/lib/utils';
 
 const menuItems = [
     { icon: Home, label: 'Home', href: '/' },
     { icon: Map, label: 'Plan Trip', href: '/planner' },
+    { icon: Compass, label: 'Live Map', href: '/map' },
     { icon: Hotel, label: 'Hotels', href: '/hotels' },
     { icon: User, label: 'Guides', href: '/guides' },
+    { icon: Users, label: 'Community', href: '/community' },
     { icon: Calendar, label: 'Bookings', href: '/bookings' },
 ];
 

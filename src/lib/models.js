@@ -1,50 +1,64 @@
 // src/lib/models.js
-// Free-tier implementation for LLM chat and vision
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-import OpenAI from 'openai';
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Perplexity client (free tier)
-const perplexity = new OpenAI({
-    apiKey: process.env.PERPLEXITY_API_KEY || 'mock-key',
-    baseURL: 'https://api.perplexity.ai',
-});
-
-// Together client (optional, mocked if key missing)
-const together = new OpenAI({
-    apiKey: process.env.TOGETHER_API_KEY || 'mock-key',
-    baseURL: 'https://api.together.xyz/v1',
-});
-
-/**
- * Generate a chat response using either Perplexity (default) or Together.
- * Returns a mock string when no real API key is available.
- */
-export const generateChatResponse = async (messages, modelProvider = 'perplexity') => {
+export const generateChatResponse = async (messages) => {
     try {
-        if (modelProvider === 'together') {
-            const completion = await together.chat.completions.create({
-                messages,
-                model: 'Qwen/Qwen1.5-72B-Chat',
-            });
-            return completion.choices[0].message.content;
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+        // Convert messages to Gemini history format
+        // Gemini expects roles 'user' and 'model'
+        let history = messages.slice(0, -1).map(m => ({
+            role: m.role === 'user' ? 'user' : 'model',
+            parts: [{ text: m.content }],
+        }));
+
+        // Ensure history starts with a user message
+        const firstUserIndex = history.findIndex(m => m.role === 'user');
+        if (firstUserIndex !== -1) {
+            history = history.slice(firstUserIndex);
+        } else if (history.length > 0 && history[0].role === 'model') {
+            // If there are no user messages in history but there is history (e.g. just a greeting), clear it
+            history = [];
         }
-        // Default to Perplexity
-        const completion = await perplexity.chat.completions.create({
-            messages,
-            model: 'llama-3.1-sonar-small-128k-online',
+
+        const chat = model.startChat({
+            history: history,
         });
-        return completion.choices[0].message.content;
+
+        const lastMessage = messages[messages.length - 1].content;
+        const result = await chat.sendMessage(lastMessage);
+        const response = await result.response;
+        return response.text();
     } catch (error) {
-        console.error('LLM Error:', error);
-        return "I'm having trouble connecting to my brain right now. Please try again later! (Mock response)";
+        console.error("Gemini Chat Error:", error);
+        const keyStatus = process.env.GEMINI_API_KEY ? "Key Present" : "Key Missing";
+        return `I'm having trouble connecting to my brain right now. (${keyStatus}) Error: ${error.message}`;
     }
 };
 
-/**
- * Mock vision response – no external API call.
- * Returns a placeholder string containing the image URL and optional prompt.
- */
 export const generateVisionResponse = async (imageUrl, prompt) => {
-    console.log('Mock vision processing for', imageUrl);
-    return `Mock vision response: ${prompt || "Image description"} (image URL: ${imageUrl})`;
+    try {
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+        // Fetch the image
+        const imageResp = await fetch(imageUrl);
+        const arrayBuffer = await imageResp.arrayBuffer();
+        const base64Image = Buffer.from(arrayBuffer).toString('base64');
+
+        const imagePart = {
+            inlineData: {
+                data: base64Image,
+                mimeType: "image/jpeg", // Assuming JPEG for simplicity, could be dynamic
+            },
+        };
+
+        const result = await model.generateContent([prompt || "Describe this image", imagePart]);
+        const response = await result.response;
+        return response.text();
+    } catch (error) {
+        console.error("Gemini Vision Error:", error);
+        return "I'm having trouble seeing this image right now.";
+    }
 };
