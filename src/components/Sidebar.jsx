@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { Home, Map, Hotel, Calendar, Settings, User, Users, Compass } from 'lucide-react';
+import { Home, Map, Hotel, Calendar, Settings, User, Users, Compass, LogIn, LogOut } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { cn } from '@/lib/utils';
+import { useSession, signOut } from "next-auth/react";
 
 const menuItems = [
     { icon: Home, label: 'Home', href: '/' },
@@ -15,6 +16,7 @@ const menuItems = [
 
 export default function Sidebar() {
     const router = useRouter();
+    const { data: session } = useSession();
 
     return (
         <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-sand-200 z-50 hidden md:flex flex-col">
@@ -47,11 +49,29 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            <div className="p-4 border-t border-sand-200">
+            <div className="p-4 border-t border-sand-200 space-y-2">
                 <Link href="/admin" className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-gray-800 transition-colors">
                     <Settings className="w-5 h-5" />
                     <span className="text-sm font-medium">Admin</span>
                 </Link>
+
+                {session ? (
+                    <button
+                        onClick={() => signOut()}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                    >
+                        <LogOut className="w-5 h-5" />
+                        <span className="text-sm font-medium">Sign Out</span>
+                    </button>
+                ) : (
+                    <Link
+                        href="/auth/signin"
+                        className="flex items-center gap-3 px-4 py-3 text-teal-600 hover:bg-teal-50 rounded-xl transition-colors"
+                    >
+                        <LogIn className="w-5 h-5" />
+                        <span className="text-sm font-medium">Sign In</span>
+                    </Link>
+                )}
             </div>
         </aside>
     );
