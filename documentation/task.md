@@ -1,0 +1,32 @@
+# IncredibleIndiaGuide — Beach Paradise (Summer Mode)
+
+- [x] Project Initialization <!-- id: 0 -->
+    - [x] Create Next.js + Tailwind project <!-- id: 1 -->
+    - [x] Configure Tailwind (colors, fonts) <!-- id: 2 -->
+    - [x] Setup directory structure (`src/pages`, `src/components`, `src/lib`, `public/images`) <!-- id: 3 -->
+    - [x] Install dependencies (`stripe`, `razorpay`, `cloudinary`, `openai`, `formidable`, etc.) <!-- id: 4 -->
+- [x] Assets & Design System <!-- id: 5 -->
+    - [x] Setup Hero Images (Copy or Generate) <!-- id: 6 -->
+    - [x] Create Layout & Sidebar Components <!-- id: 7 -->
+    - [x] Create Reusable UI Components (Cards, Buttons, Inputs) <!-- id: 8 -->
+- [x] Core Pages Implementation <!-- id: 9 -->
+    - [x] Home Page (`index.jsx`) <!-- id: 10 -->
+    - [x] Hotels Page (`hotels.jsx`) <!-- id: 11 -->
+    - [x] Guides Page (`guides.jsx`) <!-- id: 12 -->
+    - [x] Bookings Page (`bookings.jsx`) <!-- id: 13 -->
+    - [x] Admin Page (`admin.jsx`) <!-- id: 14 -->
+- [x] AI Trip Planner & Chat Assistant <!-- id: 15 -->
+    - [x] Chat Interface (ChatWidget, Message Bubbles) <!-- id: 16 -->
+    - [x] Voice Input (STT) & Output (TTS) Components <!-- id: 17 -->
+    - [x] Media Uploads (Image/Video) handling <!-- id: 18 -->
+    - [x] API: Chatbot (LLM integration) <!-- id: 19 -->
+    - [x] API: STT/TTS endpoints <!-- id: 20 -->
+    - [x] API: Upload endpoint <!-- id: 21 -->
+- [x] Payments & Bookings <!-- id: 22 -->
+    - [x] API: Stripe Integration <!-- id: 23 -->
+    - [x] API: Razorpay Integration <!-- id: 24 -->
+    - [x] Booking Flow & Webhooks <!-- id: 25 -->
+- [x] Final Polish & Documentation <!-- id: 26 -->
+    - [x] README.md with deployment instructions <!-- id: 27 -->
+    - [x] Environment Variables (`.env.example`) <!-- id: 28 -->
+    - [x] Verification & Testing <!-- id: 29 -->
