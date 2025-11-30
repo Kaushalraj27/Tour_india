@@ -15,7 +15,7 @@ export default function handler(req, res) {
         // Return all messages
         return res.status(200).json(messages);
     } else if (req.method === 'POST') {
-        const { user, text } = req.body;
+        const { user, text, recipient } = req.body;
 
         if (!user || !text) {
             return res.status(400).json({ message: 'User and text are required' });
@@ -25,6 +25,7 @@ export default function handler(req, res) {
             id: uuidv4(),
             user,
             text,
+            recipient: recipient || null, // null means public group chat
             timestamp: new Date().toISOString(),
         };
 
